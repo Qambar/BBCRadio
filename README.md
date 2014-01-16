@@ -1,7 +1,6 @@
 BBCRadio
 ========
 
-Demo 
-
+Screenshot
 
 ![Screenshot](/screenshot.png "Screenshot")
