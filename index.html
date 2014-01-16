@@ -9,85 +9,6 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
   <script src="./js/widgets/bbc.search.js"></script>
 
-  <script type="text/javascript">
-    $(function() {
-
-    $.bbcSearch = $('#searchfield');
-
-    $.bbcSearch['search']();
-    $.bbcSearch['search']('setUrl','http://www.bbc.co.uk/iplayer/ion/searchextended/');
-
-    var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C",
-      "C++",
-      "Clojure",
-      "COBOL",
-      "ColdFusion",
-      "Erlang",
-      "Fortran",
-      "Groovy",
-      "Haskell",
-      "Java",
-      "JavaScript",
-      "Lisp",
-      "Perl",
-      "PHP",
-      "Python",
-      "Ruby",
-      "Scala",
-      "Scheme"
-    ];
-
-    var arrayUnique = function(a) {
-        return a.reduce(function(p, c) {
-            if (p.indexOf(c) < 0) p.push(c);
-            return p;
-        }, []);
-    };
-    var cache = {};
-    var jsonpCallback;
-
-    $( "#searchfield" ).autocomplete({
-      minLength: 2,
-      source: function( request, response ) {
-        var term = request.term;
-        if ( term in cache ) {
-          response( cache[ term ] );
-          return;
-        }
-
-        $.bbcSearch['search']('addSearchAvailability','iplayer');
-        $.bbcSearch['search']('addQuery',term);
-
-
-
-        //console.log(term);
-
-
-        //$.bbcSearch['search']('setUrl','http://www.bbc.co.uk/iplayer/ion/searchextended/');
-
-        var responseData = [];
-        $.getJSON( $.bbcSearch['search']('getSearchUrl') , request, function( data, status, xhr ) {
-
-          for (var d in data.blocklist) {
-            responseData.push(data.blocklist[d].brand_title);
-          }
-
-          responseData = arrayUnique(responseData);
-          cache[ term ] = responseData;
-
-          response( responseData );
-        });
-
-
-      }
-    });
-  });
-  </script>
 </head>
 
 <body>
@@ -104,6 +25,7 @@
     <br/>
     <hr/>
     <h2> Result: <h2>
+    <span id="resultext"></span>
     </div><!-- @end #content -->
   </div><!-- @end #w -->
 
