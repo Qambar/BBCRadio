@@ -111,8 +111,13 @@ $.widget('bbc.search', {
 
 	,getSearchUrl: function() {
 		console.log("URL ::" +  this.url + this.argumentsForUrlString());
-		return this.url + this.argumentsForUrlString();
+		var generatedURL = this.url + this.argumentsForUrlString()
+		this.cleanArguments();
+		return generatedURL;
 
+	}
+	,cleanArguments: function() {
+		this.arguments = {};
 	}
 
 	,destroy: function() {

@@ -35,6 +35,8 @@
             }
           }
 
+
+
           if (responseData.length == 0) {
             $('#resultext').text('No results found!');
           }
