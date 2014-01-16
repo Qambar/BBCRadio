@@ -1,4 +1,4 @@
- $(function() {
+ function bbcInitDemo() {
 
     $.bbcSearch = $('#searchfield');
 
@@ -12,7 +12,6 @@
         }, []);
     };
     var cache = {};
-    var jsonpCallback;
 
     $( "#searchfield" ).autocomplete({
       minLength: 2,
@@ -25,19 +24,15 @@
 
         $.bbcSearch['search']('addSearchAvailability','iplayer');
         $.bbcSearch['search']('addQuery',term);
-
-
-
-        //console.log(term);
-
-
-        //$.bbcSearch['search']('setUrl','http://www.bbc.co.uk/iplayer/ion/searchextended/');
+        $('#searchbtn').css('background-image', 'url("images/loading.gif")');
 
         var responseData = [];
         $.getJSON( $.bbcSearch['search']('getSearchUrl') , request, function( data, status, xhr ) {
 
           for (var d in data.blocklist) {
-            responseData.push(data.blocklist[d].brand_title);
+            if (data.blocklist[d].brand_title.length > 2) {
+              responseData.push(data.blocklist[d].brand_title);
+            }
           }
 
           if (responseData.length == 0) {
@@ -45,11 +40,10 @@
           }
           responseData = arrayUnique(responseData);
           cache[ term ] = responseData;
-
+          $('#searchbtn').css('background-image', 'url("images/search.png")');
           response( responseData );
         });
 
-
       }
     });
-  });
+}
