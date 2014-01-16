@@ -4,9 +4,76 @@
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
   <title>BBC Radio Search</title>
   <link rel="stylesheet" type="text/css" media="all" href="styles.css">
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+  <script src="./js/widgets/bbc.search.js"></script>
 
+  <script type="text/javascript">
+    $(function() {
+
+    $.bbcSearch = $('#searchfield');
+
+    $.bbcSearch['search']();
+    $.bbcSearch['search']('setUrl','http://www.bbc.co.uk/iplayer/ion/searchextended/');
+
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C",
+      "C++",
+      "Clojure",
+      "COBOL",
+      "ColdFusion",
+      "Erlang",
+      "Fortran",
+      "Groovy",
+      "Haskell",
+      "Java",
+      "JavaScript",
+      "Lisp",
+      "Perl",
+      "PHP",
+      "Python",
+      "Ruby",
+      "Scala",
+      "Scheme"
+    ];
+    var cache = {};
+    var jsonpCallback;
+
+    $( "#searchfield" ).autocomplete({
+      minLength: 2,
+      source: function( request, response ) {
+        var term = request.term;
+        if ( term in cache ) {
+          response( cache[ term ] );
+          return;
+        }
+        $.ajax({
+            url: 'http://www.bbc.co.uk/iplayer/ion/searchextended/search_availability/iplayer/service_type/radio/format/json/q/fearne',
+            dataType: 'JSONP',
+            jsonpCallback: 'jsonpCallback',
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+            }
+        });
+
+
+        // $.getJSON( "http://www.bbc.co.uk/iplayer/ion/searchextended/search_availability/iplayer/service_type/radio/format/json/q/fearne", request, function( data, status, xhr ) {
+        //   //cache[ term ] = data;
+        //   console.log(data);
+        //   //response( data );
+        // });
+
+
+      }
+    });
+  });
+  </script>
 </head>
 
 <body>
@@ -15,11 +82,17 @@
     <h1><span>BBC Radio Search</span></h1>
     <form id="searchform" name="searchform" method="get" action="index.html">
       <div class="fieldcontainer">
-        <input type="text" name="s" id="s" class="searchfield" placeholder="Find a programme..." tabindex="1">
+        <input type="text" name="search" id="searchfield" class="searchfield" placeholder="Find a programme..." tabindex="1">
         <input type="submit" name="searchbtn" id="searchbtn" value="">
       </div><!-- @end .fieldcontainer -->
     </form>
+
+    <br/>
+    <hr/>
+    <h2> Result: <h2>
     </div><!-- @end #content -->
   </div><!-- @end #w -->
+
+
 </body>
 </html>
