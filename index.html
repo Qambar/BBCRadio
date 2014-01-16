@@ -41,6 +41,13 @@
       "Scala",
       "Scheme"
     ];
+
+    var arrayUnique = function(a) {
+        return a.reduce(function(p, c) {
+            if (p.indexOf(c) < 0) p.push(c);
+            return p;
+        }, []);
+    };
     var cache = {};
     var jsonpCallback;
 
@@ -52,22 +59,29 @@
           response( cache[ term ] );
           return;
         }
-        $.ajax({
-            url: 'http://www.bbc.co.uk/iplayer/ion/searchextended/search_availability/iplayer/service_type/radio/format/json/q/fearne',
-            dataType: 'JSONP',
-            jsonpCallback: 'jsonpCallback',
-            type: 'GET',
-            success: function (data) {
-                console.log(data);
-            }
+
+        $.bbcSearch['search']('addSearchAvailability','iplayer');
+        $.bbcSearch['search']('addQuery',term);
+
+
+
+        //console.log(term);
+
+
+        //$.bbcSearch['search']('setUrl','http://www.bbc.co.uk/iplayer/ion/searchextended/');
+
+        var responseData = [];
+        $.getJSON( $.bbcSearch['search']('getSearchUrl') , request, function( data, status, xhr ) {
+
+          for (var d in data.blocklist) {
+            responseData.push(data.blocklist[d].brand_title);
+          }
+
+          responseData = arrayUnique(responseData);
+          cache[ term ] = responseData;
+
+          response( responseData );
         });
-
-
-        // $.getJSON( "http://www.bbc.co.uk/iplayer/ion/searchextended/search_availability/iplayer/service_type/radio/format/json/q/fearne", request, function( data, status, xhr ) {
-        //   //cache[ term ] = data;
-        //   console.log(data);
-        //   //response( data );
-        // });
 
 
       }

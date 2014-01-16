@@ -100,7 +100,20 @@ $.widget('bbc.search', {
 		}
 		return true;
 	}
+	,argumentsForUrlString:function() {
+		var argumentsForUrl = '';
+		for (var a in this.arguments) {
+			argumentsForUrl += a + '/' + this.arguments[a] + '/';
+			console.log(a);
+		}
+		return argumentsForUrl;
+	}
 
+	,getSearchUrl: function() {
+		console.log("URL ::" +  this.url + this.argumentsForUrlString());
+		return this.url + this.argumentsForUrlString();
+
+	}
 
 	,destroy: function() {
 		$.widget.prototype.apply(this, arguments); // default destroy
